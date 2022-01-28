@@ -3,6 +3,7 @@ package util;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,5 +32,14 @@ class AdderTest {
     //then
     assertThat(adder1.apply(5)).isEqualTo(15);
     assertThat(adder2.apply(5)).isEqualTo(15);
+  }
+
+  @Test
+  public void bifunctionTest() throws Exception {
+    //given
+    BiFunction<Integer, Integer, Integer> adder = (Integer x, Integer y) -> x + y;
+    //when
+    //then
+    assertThat(adder.apply(5,10)).isEqualTo(15);
   }
 }
