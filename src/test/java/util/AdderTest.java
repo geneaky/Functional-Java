@@ -42,4 +42,15 @@ class AdderTest {
     //then
     assertThat(adder.apply(5,10)).isEqualTo(15);
   }
+
+  @Test
+  public void tryfunctionTest() throws Exception {
+    //given
+    TriFuntion<Integer, Integer, Integer, Integer> adder = (Integer x, Integer y, Integer z) -> x + y + z;
+    //when
+    //then
+    assertThat(adder.apply(15,10,5)).isEqualTo(30);
+  }
+
+
 }
