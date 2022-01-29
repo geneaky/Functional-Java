@@ -2,6 +2,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.assertj.core.api.Assertions;
@@ -41,6 +42,22 @@ public class FunctionalTest {
   public static <T> void process(List<T> inputs, Consumer<T> processor) {
     for (T input : inputs) {
       processor.accept(input);
+    }
+  }
+
+  @Test
+  public void biConsumerTest() throws Exception {
+    //given
+    BiConsumer<Integer, Double> biConsumer = (index, input) -> System.out.println("process " + input + "at index " + index);
+    List<Double> inputs = Arrays.asList(1.1,2.2,3.3);
+    //when
+    process(inputs,biConsumer);
+    //then
+  }
+
+  public static <T> void process(List<T> inputs, BiConsumer<Integer, T> biConsumer) {
+    for (int i =0; i < inputs.size(); i++) {
+      biConsumer.accept(i,inputs.get(i));
     }
   }
 
