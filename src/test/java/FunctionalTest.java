@@ -38,8 +38,8 @@ public class FunctionalTest {
     //then
   }
 
-  public static void process(List<Integer> inputs, Consumer<Integer> processor) {
-    for (Integer input : inputs) {
+  public static <T> void process(List<T> inputs, Consumer<T> processor) {
+    for (T input : inputs) {
       processor.accept(input);
     }
   }
