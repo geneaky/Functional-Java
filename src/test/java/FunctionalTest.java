@@ -2,6 +2,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -9,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import util.User;
 
 public class FunctionalTest {
 
@@ -92,6 +94,21 @@ public class FunctionalTest {
     }
 
     return output;
+  }
+  
+  @Test
+  public void comparatorTest() throws Exception {
+    //given
+    List<User> users = new ArrayList<>();
+    users.add(new User(3, "Alice"));
+    users.add(new User(1, "Charlie"));
+    users.add(new User(5, "Bob"));
+    //when
+    Collections.sort(users,(u1,u2) -> u1.getId() - u2.getId());
+    Collections.sort(users, (u1, u2) -> u1.getName().compareTo(u2.getName()));
+    //id순으로 정렬 후 이름순으로 정렬
+    System.out.println(users);
+    //then
   }
 
 }
