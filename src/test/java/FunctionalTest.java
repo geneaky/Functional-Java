@@ -1,5 +1,6 @@
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -29,14 +30,18 @@ public class FunctionalTest {
   @Test
   public void consumerTest() throws Exception {
     //given
-    Consumer<String> stringConsumer = (str) -> System.out.println(str);
+    Consumer<String> stringConsumer = str -> System.out.println(str);
+    Consumer<Integer> integerConsumer = input -> System.out.println(input);
     //when
     stringConsumer.accept("hello");
+    process(Arrays.asList(1,2,3,4,5),integerConsumer);
     //then
   }
 
   public static void process(List<Integer> inputs, Consumer<Integer> processor) {
-
+    for (Integer input : inputs) {
+      processor.accept(input);
+    }
   }
 
 }
