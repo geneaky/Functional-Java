@@ -1,9 +1,11 @@
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -59,6 +61,37 @@ public class FunctionalTest {
     for (int i =0; i < inputs.size(); i++) {
       biConsumer.accept(i,inputs.get(i));
     }
+  }
+
+  @Test
+  public void predicateTest() throws Exception {
+    //given
+    Predicate<Integer> isPositive = x -> x > 0;
+    List<Integer> list = Arrays.asList(0,-2,1,3,5);
+    //when
+    List<Integer> result = filter(list,isPositive);
+    List<Integer> result1 = filter(list,isPositive.negate());
+    List<Integer> result2 = filter(list,isPositive.or(x -> x==0));
+    List<Integer> result3 = filter(list,isPositive.and(x -> x % 2 == 0));
+    System.out.println(isPositive instanceof Object);
+    //then
+    assertThat(isPositive.test(10)).isTrue();
+    assertThat(result).containsExactly(1,3,5);
+    assertThat(result1).containsExactly(0,-2);
+    assertThat(result2).containsExactly(0,1,3,5);
+    assertThat(result3).isEmpty();
+  }
+
+  public static <T> List<T> filter(List<T> inputs, Predicate<T> condition) {
+    List<T> output = new ArrayList<>();
+
+    for (T input : inputs) {
+      if (condition.test(input)) {
+        output.add(input);
+      }
+    }
+
+    return output;
   }
 
 }
