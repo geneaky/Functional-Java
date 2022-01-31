@@ -263,6 +263,62 @@ public class StreamTest {
         .sorted()
         .collect(Collectors.toList());
     System.out.println(sortedNumbers);
+
+    User user1 = new User()
+        .setId(101)
+        .setName("paul")
+        .setVerified(true)
+        .setEmailAdddress("alice@naver.com");
+    User user2 = new User()
+        .setId(102)
+        .setName("david")
+        .setVerified(false)
+        .setEmailAdddress("bob@naver.com");
+    User user3 = new User()
+        .setId(103)
+        .setName("john")
+        .setVerified(false)
+        .setEmailAdddress("charlie@naver.com");
+    List<User> users = Arrays.asList(user1, user2, user3);
+
+    List<User> sortedUsers = users.stream()
+        .sorted((u1, u2) -> u1.getName().compareTo(u2.getName()))
+        .collect(Collectors.toList());
+    System.out.println(sortedUsers);
+    LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    Order order1 = new Order()
+        .setId(1001)
+        .setStatus(OrderStatus.CRAETED)
+        .setCratedAt(now.minusHours(4))
+        .setCreatedByUserId(101);
+    Order order2 = new Order()
+        .setId(1002)
+        .setStatus(OrderStatus.ERROR)
+        .setCratedAt(now.minusHours(1))
+        .setCreatedByUserId(103);
+    Order order3 = new Order()
+        .setId(1003)
+        .setStatus(OrderStatus.ERROR)
+        .setCratedAt(now.minusHours(36))
+        .setCreatedByUserId(102);
+    Order order4 = new Order()
+        .setId(1004)
+        .setStatus(OrderStatus.IN_PROGRESS)
+        .setCratedAt(now.minusHours(15))
+        .setCreatedByUserId(104);
+    Order order5 = new Order()
+        .setId(1005)
+        .setStatus(OrderStatus.PROCESSED)
+        .setCratedAt(now.minusHours(10))
+        .setCreatedByUserId(102);
+
+    List<Order> orders = Arrays.asList(order1, order2, order3, order4, order5);
+
+    List<Order> sortedOrders = orders.stream()
+        .sorted((o1, o2) -> o1.getCratedAt().compareTo(o2.getCratedAt()))
+        .collect(Collectors.toList());
+
+    System.out.println(sortedOrders);
     //when
     //then
   }
