@@ -1,6 +1,7 @@
 package util;
 
 import java.util.List;
+import java.util.Optional;
 
 public class User {
 
@@ -12,8 +13,8 @@ public class User {
 
 
 
-  public String getEmailAdddress() {
-    return emailAdddress;
+  public Optional<String> getEmailAdddress() {
+    return Optional.ofNullable(emailAdddress);
   }
 
   public User setEmailAdddress(String emailAdddress) {
