@@ -102,4 +102,75 @@ public class StreamTest {
     //then
   }
 
+  @Test
+  public void streamMapTest() throws Exception {
+    //given
+    List<Integer> numberList = Arrays.asList(3, 6, -4);
+    List<Integer> numberListX2 = numberList.stream().map(integer -> integer * 2).collect(Collectors.toList());
+    System.out.println(numberListX2);
+
+    List<String> stringList = numberList.stream()
+        .map(x -> "Number is " + x)
+        .collect(Collectors.toList());
+    System.out.println(stringList);
+    //when
+    //then
+  }
+
+  @Test
+  public void orderStreamMapTest() throws Exception {
+    //given
+    User user1 = new User()
+        .setId(101)
+        .setName("alice")
+        .setVerified(true)
+        .setEmailAdddress("alice@naver.com");
+    User user2 = new User()
+        .setId(102)
+        .setName("bob")
+        .setVerified(false)
+        .setEmailAdddress("bob@naver.com");
+    User user3 = new User()
+        .setId(103)
+        .setName("charlie")
+        .setVerified(false)
+        .setEmailAdddress("charlie@naver.com");
+    List<User> users = Arrays.asList(user1, user2, user3);
+
+    List<String> userEmailList = users.stream()
+        .map(User::getEmailAdddress)
+        .collect(Collectors.toList());
+    System.out.println(userEmailList);
+
+    Order order1 = new Order()
+        .setId(1001)
+        .setStatus(OrderStatus.CRAETED)
+        .setCreatedByUserId(101);
+    Order order2 = new Order()
+        .setId(1002)
+        .setStatus(OrderStatus.ERROR)
+        .setCreatedByUserId(103);
+    Order order3 = new Order()
+        .setId(1003)
+        .setStatus(OrderStatus.ERROR)
+        .setCreatedByUserId(102);
+    Order order4 = new Order()
+        .setId(1004)
+        .setStatus(OrderStatus.IN_PROGRESS)
+        .setCreatedByUserId(104);
+    Order order5 = new Order()
+        .setId(1005)
+        .setStatus(OrderStatus.PROCESSED)
+        .setCreatedByUserId(102);
+
+    List<Order> orders = Arrays.asList(order1, order2, order3, order4, order5);
+    List<Long> orderUserId = orders.stream()
+        .map(Order::getCreatedByUserId)
+        .collect(Collectors.toList());
+    System.out.println(orderUserId);
+
+    //when
+    //then
+  }
+
 }
