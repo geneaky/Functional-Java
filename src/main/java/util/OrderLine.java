@@ -9,6 +9,10 @@ public class OrderLine {
   private int quantity;
   private BigDecimal amount;
 
+  public OrderLine() {
+
+  }
+
   public enum OrderLineType {
     PURCHASE,
     DISCOUNT
@@ -27,39 +31,55 @@ public class OrderLine {
     return id;
   }
 
-  public void setId(long id) {
+  public OrderLine setId(long id) {
     this.id = id;
+    return this;
   }
 
   public OrderLineType getType() {
     return type;
   }
 
-  public void setType(OrderLineType type) {
+  public OrderLine setType(OrderLineType type) {
     this.type = type;
+    return this;
   }
 
   public long getProductid() {
     return productid;
   }
 
-  public void setProductid(long productid) {
+  public OrderLine setProductid(long productid) {
     this.productid = productid;
+    return this;
   }
 
   public int getQuantity() {
     return quantity;
   }
 
-  public void setQuantity(int quantity) {
+  public OrderLine setQuantity(int quantity) {
     this.quantity = quantity;
+    return this;
   }
 
   public BigDecimal getAmount() {
     return amount;
   }
 
-  public void setAmount(BigDecimal amount) {
+  public OrderLine setAmount(BigDecimal amount) {
     this.amount = amount;
+    return this;
+  }
+
+  @Override
+  public String toString() {
+    return "OrderLine{" +
+        "id=" + id +
+        ", type=" + type +
+        ", productid=" + productid +
+        ", quantity=" + quantity +
+        ", amount=" + amount +
+        '}';
   }
 }

@@ -73,16 +73,18 @@ public class Order {
     return amount;
   }
 
-  public void setAmount(BigDecimal amount) {
+  public Order setAmount(BigDecimal amount) {
     this.amount = amount;
+    return this;
   }
 
   public List<OrderLine> getOrderLines() {
     return orderLines;
   }
 
-  public void setOrderLines(List<OrderLine> orderLines) {
+  public Order setOrderLines(List<OrderLine> orderLines) {
     this.orderLines = orderLines;
+    return this;
   }
 
   @Override
