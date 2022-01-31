@@ -1,23 +1,68 @@
 package util;
 
+import java.util.List;
+
 public class User {
 
   private int id;
   private String name;
+  private String emailAdddress;
+  private boolean isVerified;
+  private List<Integer> friendUserIds;
+
+
+
+  public String getEmailAdddress() {
+    return emailAdddress;
+  }
+
+  public User setEmailAdddress(String emailAdddress) {
+    this.emailAdddress = emailAdddress;
+    return this;
+  }
+
+  public boolean isVerified() {
+    return isVerified;
+  }
+
+  public User setVerified(boolean verified) {
+    isVerified = verified;
+    return this;
+  }
+
+  public List<Integer> getFriendUserIds() {
+    return friendUserIds;
+  }
+
+  public User setFriendUserIds(List<Integer> friendUserIds) {
+    this.friendUserIds = friendUserIds;
+    return this;
+  }
 
   public int getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public User setId(int id)
+  {
     this.id = id;
+    return this;
   }
 
   public String getName() {
     return name;
   }
 
-  public void setName(String name) {
+  public User setName(String name) {
+    this.name = name;
+    return this;
+  }
+
+  public User() {
+  }
+
+  public User(int id, String name) {
+    this.id = id;
     this.name = name;
   }
 
@@ -27,10 +72,5 @@ public class User {
         "id=" + id +
         ", name='" + name + '\'' +
         '}';
-  }
-
-  public User(int id, String name) {
-    this.id = id;
-    this.name = name;
   }
 }
