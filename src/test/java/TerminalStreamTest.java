@@ -1,15 +1,14 @@
 import static org.assertj.core.api.Assertions.*;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import util.Order;
 import util.Order.OrderStatus;
@@ -373,5 +372,30 @@ public class TerminalStreamTest {
     assertThat(sumOfOrderLines).isEqualTo(BigDecimal.valueOf(12000));
   }
 
+  @Test
+  public void collectors() throws Exception {
+    //given
+    List<Integer> numberList = Stream.of(3, 5, -3, 3, 4, 5)
+        .collect(Collectors.toList());
+
+    Set<Integer> numberSet = Stream.of(3, 5, -3, 3, 4, 5)
+        .collect(Collectors.toSet());
+
+    List<Integer> numberList2 = Stream.of(3, 5, -3, 3, 4, 5)
+        .collect(Collectors.mapping(x -> Math.abs(x), Collectors.toList()));
+
+    Set<Integer> numberList3 = Stream.of(3, 5, -3, 3, 4, 5)
+        .collect(Collectors.mapping(x -> Math.abs(x), Collectors.toSet()));
+
+    Integer sum = Stream.of(3, 5, -3, 3, 4, 5)
+        .collect(Collectors.reducing(0, (x, y) -> x + y));
+    //when
+    System.out.println(numberList);
+    System.out.println(numberSet);
+    System.out.println(numberList2);
+    System.out.println(numberList3);
+    //then
+    assertThat(sum).isEqualTo(17);
+  }
 
 }
