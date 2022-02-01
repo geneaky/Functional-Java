@@ -12,6 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
+import service.EmailService;
 import util.Order;
 import util.Order.OrderStatus;
 import util.OrderLine;
@@ -523,6 +524,62 @@ public class TerminalStreamTest {
     System.out.println(unitDigitStrMap);
     System.out.println(orderStatusMap);
     System.out.println(orderStatusToSumOfAmountMap);
+    //then
+  }
+
+  @Test
+  public void partitionBy() throws Exception {
+    //given
+    List<Integer> numbers = Arrays.asList(13, 2, 101, 203, 304, 402, 305, 349, 2312, 203);
+    Map<Boolean, List<Integer>> numberPartitions = numbers.stream()
+        .collect(Collectors.partitioningBy(x -> x % 2 == 0));
+
+    LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    User user1 = new User()
+        .setId(101)
+        .setName("alice")
+        .setVerified(true)
+        .setFriendUserIds(Arrays.asList(201,202,203,204))
+        .setCreatedAt(now.minusDays(2))
+        .setEmailAdddress("alice@naver.com");
+    User user2 = new User()
+        .setId(102)
+        .setName("bob")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(204,205))
+        .setCreatedAt(now.minusHours(10))
+        .setEmailAdddress("bob@naver.com");
+    User user3 = new User()
+        .setId(103)
+        .setName("charlie")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(206,207,208))
+        .setCreatedAt(now.minusHours(1))
+        .setEmailAdddress("charlie@naver.com");
+    User user4 = new User()
+        .setId(104)
+        .setName("david")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(208))
+        .setCreatedAt(now.minusHours(27))
+        .setEmailAdddress("david@naver.com");
+
+    List<User> users = Arrays.asList(user1, user2, user3, user4);
+    Map<Boolean, List<User>> userPartitions = users.stream()
+        .collect(Collectors.partitioningBy(user -> user.getFriendUserIds().size() > 5));
+
+    EmailService emailService = new EmailService();
+
+    for(User user: userPartitions.get(true)) {
+      emailService.sendPalyWithFriendsEmail(user);
+    }
+
+    for(User user: userPartitions.get(false)) {
+      emailService.sendMakeMoreFriendsEmail(user);
+    }
+
+    //when
+    System.out.println(numberPartitions.get(true));
     //then
   }
 
