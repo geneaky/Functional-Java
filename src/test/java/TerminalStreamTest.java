@@ -1,5 +1,7 @@
 import static org.assertj.core.api.Assertions.*;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -11,6 +13,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import util.Order;
 import util.Order.OrderStatus;
+import util.OrderLine;
 import util.User;
 
 public class TerminalStreamTest {
@@ -257,9 +260,117 @@ public class TerminalStreamTest {
   @Test
   public void reduce() throws Exception {
     //given
+    List<Integer> numbers = Arrays.asList(1, 4, -2, -5, 3);
+    Integer sum = numbers.stream()
+        .reduce((x, y) -> x + y)
+        .get();
+
+    Integer min = numbers.stream()
+        .reduce((x, y) -> x < y ? x : y).get();
+
+    Integer product = numbers.stream()
+        .reduce(1, (x, y) -> x * y);
+
+    List<String> numberStrList = Arrays.asList("3", "2", "5", "-4");
+    Integer sumOfNumberStrList = numberStrList.stream()
+        .map(Integer::parseInt)
+        .reduce(0, (x, y) -> x + y);
+
+    Integer sumOfNumberStrList2 = numberStrList.stream()
+        .reduce(0, (number, str) -> number + Integer.parseInt(str), (num1, num2) -> num1 + num2);
+    //when
+    //then
+    assertThat(sum).isEqualTo(1);
+    assertThat(min).isEqualTo(-5);
+    assertThat(product).isEqualTo(120);
+    assertThat(sumOfNumberStrList).isEqualTo(6);
+    assertThat(sumOfNumberStrList2).isEqualTo(6);
+  }
+
+  @Test
+  public void reduceUser() throws Exception {
+    //given
+    LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    User user1 = new User()
+        .setId(101)
+        .setName("alice")
+        .setVerified(true)
+        .setFriendUserIds(Arrays.asList(201,202,203,204))
+        .setCreatedAt(now.minusDays(2))
+        .setEmailAdddress("alice@naver.com");
+    User user2 = new User()
+        .setId(102)
+        .setName("bob")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(204,205))
+        .setCreatedAt(now.minusHours(10))
+        .setEmailAdddress("bob@naver.com");
+    User user3 = new User()
+        .setId(103)
+        .setName("charlie")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(206,207,208))
+        .setCreatedAt(now.minusHours(1))
+        .setEmailAdddress("charlie@naver.com");
+    User user4 = new User()
+        .setId(104)
+        .setName("david")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(208))
+        .setCreatedAt(now.minusHours(27))
+        .setEmailAdddress("david@naver.com");
+
+    List<User> users = Arrays.asList(user1, user2, user3, user4);
+
+    Integer sumOfUserFriends = users.stream()
+        .map(User::getFriendUserIds)
+        .map(List::size)
+        .reduce(0, (x, y) -> x + y);
+    //when
+    //then
+    assertThat(sumOfUserFriends).isEqualTo(10);
+  }
+
+  @Test
+  public void orderReduce() throws Exception {
+    //given
+    Order order1 = new Order()
+        .setId(1000L)
+        .setOrderLines(Arrays.asList(
+            new OrderLine()
+                .setAmount(BigDecimal.valueOf(1000)),
+            new OrderLine()
+                .setAmount(BigDecimal.valueOf(2000))
+        ));
+    Order order2 = new Order()
+        .setId(1001L)
+        .setOrderLines(Arrays.asList(
+            new OrderLine()
+                .setAmount(BigDecimal.valueOf(2000)),
+            new OrderLine()
+                .setAmount(BigDecimal.valueOf(3000))
+        ));
+    Order order3 = new Order()
+        .setId(1002L)
+        .setOrderLines(Arrays.asList(
+            new OrderLine()
+                .setAmount(BigDecimal.valueOf(3000)),
+            new OrderLine()
+                .setAmount(BigDecimal.valueOf(1000))
+        ));
+
+    List<Order> orders = Arrays.asList(order1, order2, order3);
+
+    BigDecimal sumOfOrderLines = orders.stream()
+        .map(Order::getOrderLines)
+        .flatMap(List::stream)
+        .map(OrderLine::getAmount)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
 
     //when
     //then
+
+    assertThat(sumOfOrderLines).isEqualTo(BigDecimal.valueOf(12000));
   }
 
 
