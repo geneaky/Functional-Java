@@ -643,4 +643,85 @@ public class TerminalStreamTest {
     //then
   }
 
+  @Test
+  public void parallel() throws Exception {
+    //given
+    LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    User user1 = new User()
+        .setId(101)
+        .setName("alice")
+        .setVerified(true)
+        .setFriendUserIds(Arrays.asList(201,202,203,204))
+        .setCreatedAt(now.minusDays(2))
+        .setEmailAdddress("alice@naver.com");
+    User user2 = new User()
+        .setId(102)
+        .setName("bob")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(204,205))
+        .setCreatedAt(now.minusHours(10))
+        .setEmailAdddress("bob@naver.com");
+    User user3 = new User()
+        .setId(103)
+        .setName("charlie")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(206,207,208))
+        .setCreatedAt(now.minusHours(1))
+        .setEmailAdddress("charlie@naver.com");
+    User user4 = new User()
+        .setId(104)
+        .setName("david")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(208))
+        .setCreatedAt(now.minusHours(27))
+        .setEmailAdddress("david@naver.com");
+    User user5 = new User()
+        .setId(105)
+        .setName("tom")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(208,210,211))
+        .setCreatedAt(now.minusHours(27))
+        .setEmailAdddress("tom@naver.com");
+    User user6 = new User()
+        .setId(106)
+        .setName("frank")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(208))
+        .setCreatedAt(now.minusHours(27))
+        .setEmailAdddress("frank@naver.com");
+
+
+    EmailService emailService = new EmailService();
+
+    long startTime = System.currentTimeMillis();
+    List<User> users = Arrays.asList(user1, user2, user3, user4,user5, user6);
+    users.stream()
+        .filter(user -> !user.isVerified())
+        .forEach(emailService::snedVerifiyYourEmail);
+    long endTime = System.currentTimeMillis();
+    System.out.println("Sequentail: " + (endTime - startTime) + "ms");
+
+    startTime = System.currentTimeMillis();
+    users.stream().parallel()
+        .filter(user -> !user.isVerified())
+        .forEach(emailService::snedVerifiyYourEmail);
+    endTime = System.currentTimeMillis();
+    System.out.println("Parallel: " + (endTime - startTime) + "ms");
+
+    List<User> processedUsers = users.parallelStream()
+        .map(user -> {
+          System.out.println("Capitalize user name for user " + user.getId());
+          user.setName(user.getName().toUpperCase());
+          return user;
+        })
+        .map(user -> {
+          System.out.println("Set 'isVerified' to true for suer " + user.getId());
+          user.setVerified(true);
+          return user;
+        })
+        .collect(Collectors.toList());
+    //when
+    System.out.println(processedUsers);
+    //then
+  }
 }
