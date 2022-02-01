@@ -5,8 +5,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -396,6 +398,80 @@ public class TerminalStreamTest {
     System.out.println(numberList3);
     //then
     assertThat(sum).isEqualTo(17);
+  }
+
+  @Test
+  public void toMap() throws Exception {
+    //given
+    Map<Integer, String> numberMap = Stream.of(3, 5, -4, 2, 6)
+        .collect(Collectors.toMap(Function.identity(), x -> "Number is " + x));
+
+    LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    User user1 = new User()
+        .setId(101)
+        .setName("alice")
+        .setVerified(true)
+        .setFriendUserIds(Arrays.asList(201,202,203,204))
+        .setCreatedAt(now.minusDays(2))
+        .setEmailAdddress("alice@naver.com");
+    User user2 = new User()
+        .setId(102)
+        .setName("bob")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(204,205))
+        .setCreatedAt(now.minusHours(10))
+        .setEmailAdddress("bob@naver.com");
+    User user3 = new User()
+        .setId(103)
+        .setName("charlie")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(206,207,208))
+        .setCreatedAt(now.minusHours(1))
+        .setEmailAdddress("charlie@naver.com");
+    User user4 = new User()
+        .setId(104)
+        .setName("david")
+        .setVerified(false)
+        .setFriendUserIds(Arrays.asList(208))
+        .setCreatedAt(now.minusHours(27))
+        .setEmailAdddress("david@naver.com");
+
+    List<User> users = Arrays.asList(user1, user2, user3, user4);
+
+    Map<Integer, User> userIdToUserMap = users.stream()
+        .collect(Collectors.toMap(User::getId, Function.identity()));
+
+    Order order1 = new Order()
+        .setId(1001)
+        .setAmount(BigDecimal.valueOf(3000))
+        .setStatus(OrderStatus.CRAETED);
+    Order order2 = new Order()
+        .setId(1002)
+        .setAmount(BigDecimal.valueOf(12000))
+        .setStatus(OrderStatus.ERROR);
+    Order order3 = new Order()
+        .setId(1003)
+        .setAmount(BigDecimal.valueOf(4000))
+        .setStatus(OrderStatus.ERROR);
+    Order order4 = new Order()
+        .setId(1004)
+        .setAmount(BigDecimal.valueOf(7000))
+        .setStatus(OrderStatus.IN_PROGRESS);
+    Order order5 = new Order()
+        .setId(1005)
+        .setAmount(BigDecimal.valueOf(1000))
+        .setStatus(OrderStatus.PROCESSED);
+
+    List<Order> orders = Arrays.asList(order1, order2, order3, order4, order5);
+
+    Map<Long, OrderStatus> orderIdToOrderStatusMap = orders.stream()
+        .collect(Collectors.toMap(Order::getId, Order::getStatus));
+    //when
+
+    System.out.println(numberMap);
+    System.out.println(userIdToUserMap);
+    System.out.println(orderIdToOrderStatusMap);
+    //then
   }
 
 }
