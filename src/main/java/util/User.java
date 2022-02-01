@@ -1,5 +1,6 @@
 package util;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,9 +10,17 @@ public class User {
   private String name;
   private String emailAdddress;
   private boolean isVerified;
+  private LocalDateTime createdAt;
   private List<Integer> friendUserIds;
 
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
 
+  public User setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+    return this;
+  }
 
   public Optional<String> getEmailAdddress() {
     return Optional.ofNullable(emailAdddress);

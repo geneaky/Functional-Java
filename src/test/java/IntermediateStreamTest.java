@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import util.Order;
 import util.Order.OrderStatus;
@@ -15,7 +16,7 @@ import util.OrderLine;
 import util.OrderLine.OrderLineType;
 import util.User;
 
-public class StreamTest {
+public class IntermediateStreamTest {
 
   @Test
   public void stream() throws Exception {
@@ -124,6 +125,7 @@ public class StreamTest {
   }
 
   @Test
+  @Disabled
   public void orderStreamMapTest() throws Exception {
     //given
     User user1 = new User()
@@ -143,11 +145,11 @@ public class StreamTest {
         .setEmailAdddress("charlie@naver.com");
     List<User> users = Arrays.asList(user1, user2, user3);
 
-    List<String> userEmailList = users.stream()
+   /* List<String> userEmailList = users.stream()
         .map(User::getEmailAdddress)
         .collect(Collectors.toList());
     System.out.println(userEmailList);
-
+*/
     Order order1 = new Order()
         .setId(1001)
         .setStatus(OrderStatus.CRAETED)
@@ -179,6 +181,7 @@ public class StreamTest {
   }
 
   @Test
+  @Disabled
   public void pipelineTest() throws Exception {
     //given
     User user1 = new User()
@@ -201,17 +204,19 @@ public class StreamTest {
     List<String> emails = new ArrayList<>();
     for (User user : users) {
       if (!user.isVerified()) {
-        emails.add(user.getEmailAdddress());
+//        emails.add(user.getEmailAdddress());
       }
     }
 
     System.out.println(emails);
+/*
 
     List<String> emails2 = users.stream()
         .filter(user -> !user.isVerified())
         .map(User::getEmailAdddress)
         .collect(Collectors.toList());
     System.out.println(emails2);
+*/
 
     LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     Order order1 = new Order()
