@@ -230,8 +230,37 @@ public class TerminalStreamTest {
     assertThat(isAnyOrderInErrorStatus).isTrue();
   }
 
+  @Test
+  public void findAny() throws Exception {
+    //given
+    Optional<Integer> anyNegativeInterger = Stream.of(3, 2, -5, 6)
+        .filter(x -> x < 0)
+        .findAny();
+    //when
+    System.out.println(anyNegativeInterger.get());
+    //then
+  }
 
 
+  @Test
+  public void findFirst() throws Exception {
+    //given
+    Optional<Integer> firstPositiveInteger = Stream.of(3, 2, -5, 6)
+        .filter(x -> x > 0)
+        .findFirst();
+
+    //when
+    //then
+    assertThat(firstPositiveInteger.get()).isEqualTo(3);
+  }
+
+  @Test
+  public void reduce() throws Exception {
+    //given
+
+    //when
+    //then
+  }
 
 
 }
