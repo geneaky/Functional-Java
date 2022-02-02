@@ -13,6 +13,8 @@ public class User {
   private LocalDateTime createdAt;
   private List<Integer> friendUserIds;
 
+
+
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
