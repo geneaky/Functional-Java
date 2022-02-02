@@ -1,5 +1,7 @@
 import static org.assertj.core.api.Assertions.*;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -8,6 +10,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import util.Order;
+import util.OrderLine;
+import util.OrderLineAggregationPriceProcessor;
+import util.TaxPriceProcessor;
 
 public class FunctionalAdvancedTest {
 
@@ -84,6 +90,40 @@ public class FunctionalAdvancedTest {
   public static boolean returnFalse() {
     System.out.println("Returning false");
     return false;
+  }
+
+  @Test
+  public void functionComposition() throws Exception {
+    //given
+    Function<Integer, Integer> multiplyByTwo = x -> 2 * x;
+    Function<Integer, Integer> addTen = x -> x + 10;
+
+    Function<Integer, Integer> composedFunction = multiplyByTwo.andThen(addTen);
+    Integer result = composedFunction.apply(3);
+
+
+    Order unprocessedOrder = new Order()
+        .setId(1001L)
+            .setOrderLines(Arrays.asList(
+                new OrderLine().setAmount(BigDecimal.valueOf(1000)),
+                new OrderLine().setAmount(BigDecimal.valueOf(2000))
+            ));
+
+    List<Function<Order, Order>> priceProcessors = getPriceProcessors(unprocessedOrder);
+
+    Function<Order, Order> mergedPriceProcessors = priceProcessors.stream()
+        .reduce(Function.identity(), Function::andThen);
+
+    Order processedOrder = mergedPriceProcessors.apply(unprocessedOrder);
+    System.out.println(processedOrder);
+
+    //when
+    //then
+    assertThat(result).isEqualTo(16);
+  }
+  public static List<Function<Order, Order>> getPriceProcessors(Order order) {
+    return Arrays.asList(new OrderLineAggregationPriceProcessor(),
+        new TaxPriceProcessor(new BigDecimal("9.375")));
   }
 
 }
