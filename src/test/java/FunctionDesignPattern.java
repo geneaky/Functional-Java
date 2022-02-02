@@ -9,11 +9,14 @@ import util.DiscountPriceProcessor;
 import util.EmailProvider;
 import util.EmailSender;
 import util.FUser;
+import util.InternalUserService;
 import util.MakeMoreFriendsEmailProvider;
 import util.Price;
 import util.PriceProcessor;
 import util.TaxPriceProcessor2;
 import util.User;
+import util.UserService;
+import util.UserServiceInFunctinalWay;
 import util.VerifyYourEmailAddressEmailProvider;
 
 public class FunctionDesignPattern {
@@ -121,6 +124,36 @@ public class FunctionDesignPattern {
         .filter(FUser::isVerified)
         .filter(user -> user.getFrienduserIds().size() > 5)
         .forEach(emailSender::sendEmail);
+    //when
+    //then
+  }
+
+  @Test
+  public void templateMethodPatternTest() throws Exception {
+    //given
+    FUser user1 = FUser.builder(1, "alice")
+        .with(builder -> {
+          builder.emailAddress = "alice@naver.com";
+          builder.isVerified = false;
+          builder.friendUserIds = Arrays.asList(201,202,203,204,211,212,213,214);
+        })
+        .build();
+    UserService userService = new UserService();
+    InternalUserService internalUserService = new InternalUserService();
+
+    userService.createUser(user1);
+    internalUserService.createUser(user1);
+
+    UserServiceInFunctinalWay userServiceInFunctinalWay = new UserServiceInFunctinalWay(
+        user -> {
+          System.out.println("Validating user " + user.getName());
+          return user.getName() != null && user.getEmailAddress().isPresent();
+        },
+        user -> {
+          System.out.println("Writing user " + user.getName() + " to DB");
+        }
+    );
+    userServiceInFunctinalWay.createUser(user1);
     //when
     //then
   }

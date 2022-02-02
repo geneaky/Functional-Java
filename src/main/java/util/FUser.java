@@ -2,6 +2,7 @@ package util;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class FUser {
@@ -34,6 +35,10 @@ public class FUser {
 
   public List<Integer> getFrienduserIds() {
     return this.friendsUserIds;
+  }
+
+  public Optional<String> getEmailAddress() {
+    return Optional.of(this.emailAddress);
   }
 
   public static class Builder {
